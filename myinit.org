@@ -385,6 +385,11 @@ convert an org file to the html presentation
 
 #+end_src
 
+* Magit
+#+begin_src emacs-lisp
+  
+
+#+end_src
 
 * Check if everything is OK
 #+begin_src emacs-lisp
