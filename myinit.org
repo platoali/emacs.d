@@ -1,5 +1,17 @@
 #+STARTUP: overview
 
+* Path
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (exec-path-from-shell-initialize))
+
+#+end_src
+
+#+RESULTS:
+: t
+
 * Interface tweeks
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t
@@ -171,15 +183,40 @@ the org mode customizations
     :ensure t
     :bind ("M-s" . avy-goto-char))
 #+end_src
+* lsp-mode
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :ensure t
+    :hook (
+           (haskell-mode . lsp))
+    :commands lsp
+    )
+  (use-package lsp-ui
+    :commands lsp)
+  (use-package dap-mode)
+
+  (use-package lsp-haskell
+    :ensure t
+    )
+
+#+end_src
+
+#+RESULTS:
+
+
 * Company(auto complete)
 #+begin_src emacs-lisp
   (use-package company
     :ensure t
     :init
-    (setq company-backends '((company-capf company-etags company-dabbrev-code )))
+;    (setq company-backends '((company-capf company-etags company-dabbrev-code )))
     (global-company-mode t)
     (setq company-tooltip-align-annotations t)
     )
+  ;; (use-package company-lsp
+  ;;   :ensure t
+  ;;   :config
+  ;;   (push 'company-lsp company-backends))
 #+end_src
 
 * Haskell
@@ -198,33 +235,6 @@ the org mode customizations
       :ensure t)
     ;(use-package dap-haskell)
 
-#+end_src
-
-* lsp
-Language server protocol
-#+begin_src  emacs-lisp
-
-    (use-package lsp-mode
-      :ensure t
-      :init
-      (setq lsp-keymap-prefix "C-c l")
-      (setenv "PATH"
-	    (concat "/home/platoali/.ghcup/bin/" path-separator (getenv "PATH")))
-      :hook (
-	     (haskell-mod . lsp)
-	     )
-      :commands lsp 
-      )
-
-    (use-package lsp-ui
-      :ensure t
-      :commands lsp-ui-mode
-
-      )
-
-    (use-package lsp-ivy
-      :ensure t
-      :commands lsp-ivy-workspace-symbol)
 #+end_src
 
 * Flycheck
@@ -333,6 +343,48 @@ convert an org file to the html presentation
 
 #+RESULTS:
 : t
+
+* Ibuffer
+#+begin_src emacs-lisp
+       (global-set-key (kbd "C-x C-b") 'ibuffer)
+       (setq ibuffer-saved-filter-groups
+             (quote (("default"
+                      ("dired" (mode . dired-mode))
+                      ("org" (name . "^.*org$"))
+                      ("web" (or (mode . web-mode)
+                                 (mode . js2-mode)
+                                 (mode . css-mode)))
+                      ("shell" (or (mode . eshell-mode)
+                                   (mode . shell-mode)))
+                      ("programming" (or
+                                      (mode .haskell-mode)
+                                      (mode .lisp-mode)))
+                      ("emacs" (or (name . "^\\*scratch\\*$")
+                                   (name . "^\\*Messages\\*$")))
+                      ))))
+       (add-hook 'ibuffer-mode-hook
+                 (lambda ()
+                   (ibuffer-auto-mode 1)
+                   (ibuffer-switch-to-saved-filter-groups "default")))
+
+#+end_src
+
+#+RESULTS:
+| lambda | nil | (ibuffer-auto-mode 1) | (ibuffer-switch-to-saved-filter-groups default) |
+
+
+
+
+* Emmet-mode (html and css completions)
+#+begin_src emacs-lisp
+        (use-package emmet-mode
+          :ensure t
+          :config
+          (add-hook 'web-mode-hook 'emmet-mode))
+ 
+
+#+end_src
+
 
 * Check if everything is OK
 #+begin_src emacs-lisp
