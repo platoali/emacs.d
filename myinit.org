@@ -135,31 +135,54 @@ the org mode customizations
 
 #+end_src
 
-* Counsel, ivy , swiper , vertico
+* Vertico oderless savehist marginalia consult
 #+begin_src emacs-lisp
   (use-package vertico
     :ensure t
     :init
-    (vertico-mode +1))
+    (vertico-mode +1)
+    :custom
+    (vertico-cycle t))
+  #+END_SRC
 
+* oderless
+  #+begin_src emacs-lisp 
+  
   (use-package orderless
     :ensure t
     :init
     (setq completion-styles '(orderless)
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion)))))
+  #+end_src
+
+* saveHise
+#+begin_src emacs-lisp
 
   ;; Persist history over Emacs restarts. Vertico sorts by history position.
   (use-package savehist
     :ensure t
     :init
-
     (savehist-mode))
+#+end_src
 
-
+* marginalia
+#+begin_src emacs-lisp
   (use-package marginalia
+    :after vertico
     :ensure t
-    :config (marginalia-mode))
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy
+                             marginalia-annotators-light
+                             nil))
+    :config
+    (marginalia-mode))
+#+end_src
+
+* cunsult
+#+begin_src emacs-lisp
+  
+
 
   (use-package consult
     :ensure t
@@ -171,16 +194,15 @@ the org mode customizations
   (setq completion-ignore-case t)
   (setq read-file-name-completion-ignore-case t)
 
+#+end_src
 
 
-  (use-package orderless
-    :ensure t
-    :init
-    (setq completion-styles '(orderless)))
-
+* embark
+#+begin_src emacs-lisp
+  
   (use-package embark
     :ensure t
-    :bind    (("C-." . embark-act)         ;; pick some comfortable binding
+    :bind    (("C-," . embark-act)         ;; pick some comfortable binding
      ("C-;" . embark-dwim)        ;; good alternative: M-.
      ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
@@ -377,7 +399,7 @@ convert an org file to the html presentation
 #+RESULTS:
 : t
 
-* Ibuffer
+* COMMENT Ibuffer
 #+begin_src emacs-lisp
        (global-set-key (kbd "C-x C-b") 'ibuffer)
        (setq ibuffer-saved-filter-groups
