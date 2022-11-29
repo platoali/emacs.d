@@ -125,7 +125,7 @@ the org mode customizations
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
   (custom-set-variables
    '(org-directoy "~/orgFiles")
-   '(org-default-notes-file (concat org-directory "/notes.org"))
+   '(org-default-notes-file (concat org-directory "/notes.org/"))
    '(org-startup-folted (quote overview))
    '(org-hide-leading-stars t)
    '(org-startup-indented t)
