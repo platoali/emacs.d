@@ -15,7 +15,7 @@
 * Interface tweeks
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t
-	visible-bell nil)
+        visible-bell nil)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (menu-bar-mode 1)
@@ -27,6 +27,10 @@
   (blink-cursor-mode 1)
   (global-hl-line-mode 1)
 
+
+  ;; Disable line numbers for shell
+  (dolist (mode '(org-mode-hook term-mode-hook eshell-mode-hook))
+                (add-hook mode (lambda () (display-line-numbers-mode 0))))
   ;; remember  the recent open files
   (recentf-mode 1)
 
@@ -63,21 +67,42 @@
 
 #+end_src
 
+* Rainbow delimiters
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :hook (prog-mode .rainbow-delimiters-mode))
+
+#+end_src
+
 #+RESULTS:
-: revert-buffer
+| rainbow-delimiters-mode |
+
 
 * Package management
 #+begin_src emacs-lisp
   (require 'package)
   (setq package-enable-at-startup nil)
-  (add-to-list 'package-archives
-	       '("melpa" . "https://melpa.org/packages/"))
+  (setq package-archives '(
+               ("melpa" . "https://melpa.org/packages/")
+               ("org" . "https://orgmode.org/elpa/")
+               ("elpa" . "https://elspa.gnu.org/packages/")))
   (package-initialize)
 
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
+  (setq use-package-always-ensure t)
 #+end_src
+
+* Diminish
+#+begin_src emacs-lisp
+  (use-package diminish)
+
+#+end_src
+
+#+RESULTS:
+
+
 
 * try
 try package without installing 
@@ -88,6 +113,7 @@ try package without installing
 
 * Which key
 #+begin_src emacs-lisp
+
   (use-package which-key
     :ensure t
     :config (which-key-mode))
@@ -116,6 +142,17 @@ The selected them and customizations
   (load-theme 'modus-vivendi t)
 #+end_src
 
+* COMMENT doom-modeline
+#+begin_src emacs-lisp
+      (use-package doom-modeline
+         :init
+         (doom-modeline-mode 1))
+      (use-package all-the-icons)
+
+
+#+end_src
+
+
 * Org mode Stuff
 the org mode customizations
 #+begin_src emacs-lisp
@@ -133,9 +170,12 @@ the org mode customizations
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-Cc" 'org-capture)
 
+
 #+end_src
 
-* Vertico oderless savehist marginalia consult
+#+RESULTS:
+
+* Vertico 
 #+begin_src emacs-lisp
   (use-package vertico
     :ensure t
@@ -151,7 +191,7 @@ the org mode customizations
   (use-package orderless
     :ensure t
     :init
-    (setq completion-styles '(orderless)
+    (setq completion-styles '(orderless partial-completion basic)
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion)))))
   #+end_src
@@ -181,14 +221,13 @@ the org mode customizations
 
 * cunsult
 #+begin_src emacs-lisp
-  
-
 
   (use-package consult
     :ensure t
     :bind
     ("M-y" . 'consult-yank-from-kill-ring)
-    ( "C-x b" . 'consult-buffer))
+    ( "C-x b" . 'consult-buffer)
+    ( "C-s" . 'consult-line))
   (recentf-mode)
 
   (setq completion-ignore-case t)
@@ -196,6 +235,8 @@ the org mode customizations
 
 #+end_src
 
+#+RESULTS:
+: t
 
 * embark
 #+begin_src emacs-lisp
@@ -234,63 +275,175 @@ the org mode customizations
 
 #+RESULTS:
 
-* lsp-mode
+* COMMENT corfu
 #+begin_src emacs-lisp
+;;    (use-package corfu
+;;      :ensure t
+;;      :init
+;;      (global-corfu-mode)
+;;      :config
+;;      (corfu-echo-mode)
+;;      (corfu-history-mode)
+;;      )
+
+    ;; Optional cape package.
+  ;; See the Cape README for more tweaks!
+  (use-package cape
+    :ensure t)
+
+;;  (use-package orderless
+;;    :ensure t
+;;    :init
+;;    ;; Tune the global completion style settings to your liking!
+;;    ;; This affects the minibuffer and non-lsp completion at point.
+;;    (setq completion-styles '(orderless partial-completion basic)
+;;          completion-category-defaults nil
+;;          completion-category-overrides nil))
+
   (use-package lsp-mode
     :ensure t
-    :hook (
-           (haskell-mode . lsp))
-    :commands lsp
-    )
-  (use-package lsp-ui
-    :commands lsp)
-  (use-package dap-mode)
+    :custom
+    (lsp-completion-provider :none) ;; we use Corfu!
 
-  (use-package lsp-haskell
-    :ensure t
-    )
+    :init
+    (defun my/orderless-dispatch-flex-first (_pattern index _total)
+      (and (eq index 0) 'orderless-flex))
+
+    (defun my/lsp-mode-setup-completion ()
+      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+            '(orderless)))
+
+    ;; Optionally configure the first word as flex filtered.
+    (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
+
+    ;; Optionally configure the cape-capf-buster.
+    ;(setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))
+
+    :hook
+    (lsp-completion-mode . my/lsp-mode-setup-completion)
+    (haskell-mode . lsp))
+
+
 
 #+end_src
 
 #+RESULTS:
+| lsp |
+
+
 
 
 * Company(auto complete)
 #+begin_src emacs-lisp
-    (use-package company
-      :ensure t
-      :config
-      (setq company-idle-delay 0)
-      (setq company-minimum-prefix-length 3)
+  (use-package company
+     :ensure t
+     :config
+     (setq company-idle-delay 0)
+     (setq company-minimum-prefix-length 3)
 
-      :init
-  ;    (setq company-backends '((company-capf company-etags company-dabbrev-code )))
-      (global-company-mode t)
-      (setq company-tooltip-align-annotations t)
-      )
-    ;; (use-package company-lsp
-    ;;   :ensure t
-    ;;   :config
-    ;;   (push 'company-lsp company-backends))
+     ;(add-to-list 'company-backends 'company-at-point)
+
+     :init
+     (global-company-mode t)
+     (setq company-tooltip-align-annotations t)
+     )
+
+   (use-package company-web
+     :ensure t
+     :config
+     (add-to-list 'company-backends 'company-web-html)
+     (add-to-list 'company-backends 'company-web-jade)
+     (add-to-list 'company-backends 'company-web-slim)
+
+     )
+  (use-package company-box
+    :ensure t
+    :hook
+    (company-mode . company-box-mode))
+
+  (use-package company-quickhelp
+    :config
+    (company-quickhelp-mode)
+    :custom 
+    (company-quickhelp-delay 1)
+    )
+
+
+  ;   (push 'company-lsp company-backends))
 #+end_src
+
+#+RESULTS:
+: t
 
 * Haskell
 #+begin_src emacs-lisp
 
-    (use-package haskell-mode
+      (use-package haskell-mode
+        :init
+        (setq haskell-tags-on-save t)        
+        :config
+        (lsp)
+        :custom
+        (haskell-mode-hook '(interactive-haskell-mode lsp))
+        )
+  
+
+      (use-package dap-mode
+        :ensure t)
+                                              ;(use-package dap-haskell)
+      (use-package company-ghci
+        :config
+        (push 'company-ghci company-backends)
+        (add-hook 'haskell-interactive-mode-hook 'company-mode)
+        )
+      (add-hook 'haskell-mode-hook #'hindent-mode)
+#+end_src
+
+#+RESULTS:
+| hindent-mode | lsp |
+
+* lsp-mode
+#+begin_src emacs-lisp
+
+  (use-package lsp-mode
       :ensure t
+     ; :custom
+      ;(lsp-completion-provider :capf)
       :init
-      (setenv "PATH"
-	    (concat "/home/platoali/.ghcup/bin/" path-separator (getenv "PATH")))
-      :config
-      (lsp)
+      (setq gc-cons-threshold 100000000)
+      (setq read-process-output-max (* 1024 1024))
+      (defun my/lsp-mode-setup-completion()
+        (setf (alist 'styles (alist-get 'lsp-capf completion-category-defaults))
+              '(Flex)))
+      :hook  (
+       ;      (lsp-completion-mode . my/lsp-mode-setup-completion)
+             (haskell-mode . lsp))
+      :commands lsp-deffered
+
       )
 
-    (use-package dap-mode
-      :ensure t)
-    ;(use-package dap-haskell)
+  (use-package lsp-ui
+        :ensure t
+        :commands lsp-deffered
+        :config
+        (lsp-ui-doc-enable t)
+        )
+
+  (use-package dap-mode
+       :ensure t)
+
+  (use-package lsp-haskell
+       :ensure t
+       )
+  (use-package consult-lsp
+    :ensure t
+    :config
+    (define-key lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols))
 
 #+end_src
+
+#+RESULTS:
+: t
 
 * Flycheck
 #+begin_src emacs-lisp
@@ -307,6 +460,7 @@ the org mode customizations
     :init
     (yas-global-mode 1)
     )
+  
   (use-package yasnippet-snippets
     :ensure t
     )
@@ -314,6 +468,8 @@ the org mode customizations
     :ensure t
     )
 #+end_src
+
+#+RESULTS:
 
 * COMMENT org-reveal
 convert an org file to the html presentation
@@ -352,14 +508,7 @@ convert an org file to the html presentation
       (setq web-mode-engines-alist '(("django" . "\\.html\\'")))
       (setq web-mode-enable-auto-closing t)
      )
-  (use-package company-web
-    :ensure t
-    :config
-    (add-to-list 'company-backends 'company-web-html)
-    (add-to-list 'company-backends 'company-web-jade)
-    (add-to-list 'company-backends 'company-web-slim)
-    )
-
+  
 
 #+end_src
 
@@ -368,32 +517,32 @@ convert an org file to the html presentation
 
 * projectile
 #+begin_src emacs-lisp
-  (use-package projectile
-    :ensure t
-    :config
-    (projectile-global-mode)
-;    (setq projectile-completion-system 'ivy)
-    (projectile-register-project-type 'stack '("stack.yaml")
-                                  :project-file "stack.yaml"
-				  :compile "stack build"
-				  :test "stack  test"
-				  :run "stack run"
-				  :test-dir "test/")
-    )
-  (use-package counsel-projectile
-    :ensure t
-    :config
-    (counsel-projectile-mode t))
+    (use-package projectile
+      :config
+      (projectile-global-mode)
+    
+  ;    (setq projectile-completion-system 'ivy)
+      :init
+      (when (file-directory-p "~/projects/")
+        (setq projectile-projct-search-path "~/project/"))
+      (setq projectile-switch-project-action #'projectile-dired)
+      )
 
-  (use-package smartparens
-    :ensure ;TODO: 
-    :hook (prog-mode . smartparens-mode)
-    :custom
-    (sp-escape-quotes-after-insert nil)
-    :config
-    (require 'smartparens-config))
+    ;; (use-package counsel-projectile
+    ;;   :ensure t
+    ;;   :config
+    ;;   (counsel-projectile-mode t))
+    ;;(use-package consult-projectile
+     ;;  )
 
-  (show-paren-mode t)
+    (use-package smartparens
+      :hook (prog-mode . smartparens-mode)
+      :custom
+      (sp-escape-quotes-after-insert nil)
+      :config
+      (require 'smartparens-config))
+
+    (show-paren-mode t)
 #+end_src
 
 #+RESULTS:
@@ -442,9 +591,27 @@ convert an org file to the html presentation
 
 * Magit
 #+begin_src emacs-lisp
+  (use-package magit)
   
 
+
+
 #+end_src
+
+* helpful
+#+begin_src emacs-lisp
+  (use-package helpful
+    :bind
+    ([remap describe-function] . helpful-callable )
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . helpful-variable)
+    ([remap describe-key] . helpful-key))
+
+#+end_src
+
+#+RESULTS:
+: helpful-key
+
 
 * Check if everything is OK
 #+begin_src emacs-lisp
