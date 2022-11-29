@@ -203,7 +203,6 @@ the org mode customizations
 
 #+RESULTS:
 
-
 * Company(auto complete)
 #+begin_src emacs-lisp
   (use-package company
@@ -371,7 +370,6 @@ convert an org file to the html presentation
 
 #+RESULTS:
 | lambda | nil | (ibuffer-auto-mode 1) | (ibuffer-switch-to-saved-filter-groups default) |
-
 
 
 
