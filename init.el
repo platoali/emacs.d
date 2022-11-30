@@ -6,6 +6,7 @@
 
 (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
 
+;;(load-file "~/.emacs.d/myinit.el")
 ;; ido
 
 ;; (setq indo-eable-flex-matching t)

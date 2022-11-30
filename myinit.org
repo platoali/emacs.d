@@ -9,8 +9,6 @@
 
 #+end_src
 
-#+RESULTS:
-: t
 
 * Interface tweeks
 #+begin_src emacs-lisp
@@ -64,7 +62,7 @@
 #+end_src
 
 #+RESULTS:
-: revert-buffer
+: t
 
 * Package management
 #+begin_src emacs-lisp
@@ -119,19 +117,22 @@ The selected them and customizations
 * Org mode Stuff
 the org mode customizations
 #+begin_src emacs-lisp
+  ;(push 'org-habit org-modules)q
   (use-package org-bullets
-    :ensure t
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+        :ensure t
+        :config
+        (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
   (custom-set-variables
-   '(org-directoy "~/orgFiles")
-   '(org-default-notes-file (concat org-directory "/notes.org/"))
-   '(org-startup-folted (quote overview))
-   '(org-hide-leading-stars t)
-   '(org-startup-indented t)
-   )
+       '(org-directoy "~/orgFiles")
+       '(org-default-notes-file (concat org-directory "/notes.org/"))
+       '(org-startup-folted (quote overview))
+       '(org-hide-leading-stars t)
+       '(org-startup-indented t)
+       )
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-Cc" 'org-capture)
+
+
 
 #+end_src
 
@@ -319,10 +320,10 @@ convert an org file to the html presentation
     (setq projectile-completion-system 'ivy)
     (projectile-register-project-type 'stack '("stack.yaml")
                                   :project-file "stack.yaml"
-				  :compile "stack build"
-				  :test "stack  test"
-				  :run "stack run"
-				  :test-dir "test/")
+                                  :compile "stack build"
+                                  :test "stack  test"
+                                  :run "stack run"
+                                  :test-dir "test/")
     )
   (use-package counsel-projectile
     :ensure t
@@ -336,6 +337,8 @@ convert an org file to the html presentation
     (sp-escape-quotes-after-insert nil)
     :config
     (require 'smartparens-config))
+  
+  (use-package projectile-ripgrep)
 
   (show-paren-mode t)
 #+end_src
@@ -371,7 +374,19 @@ convert an org file to the html presentation
 #+RESULTS:
 | lambda | nil | (ibuffer-auto-mode 1) | (ibuffer-switch-to-saved-filter-groups default) |
 
+* helpfull
+#+begin_src emacs-lisp
+  (use-package helpful
+    :ensure t
+    :bind
+    ("C-h f" . helpful-callable)
+    ("C-h v" . helpful-variable)
+    )
 
+#+end_src
+
+#+RESULTS:
+: helpful-variable
 
 * Emmet-mode (html and css completions)
 #+begin_src emacs-lisp
@@ -393,7 +408,4 @@ convert an org file to the html presentation
 #+begin_src emacs-lisp
     (hl-line-mode 1)
 #+end_src
-
-
-
 
