@@ -35,7 +35,7 @@
   (recentf-mode 1)
 
   ;; Save what you enter into minibuffer prompts
-  (setq histroy-lenghth 25)
+  (setq histroy-lenghth 125)
   (savehist-mode 1)
 
   ;; remember and restor the last cursur location of opened files
@@ -77,7 +77,6 @@
 #+RESULTS:
 | rainbow-delimiters-mode |
 
-
 * Package management
 #+begin_src emacs-lisp
   (require 'package)
@@ -85,7 +84,7 @@
   (setq package-archives '(
                ("melpa" . "https://melpa.org/packages/")
                ("org" . "https://orgmode.org/elpa/")
-               ("elpa" . "https://elspa.gnu.org/packages/")))
+               ("elpa" . "https://elpa.gnu.org/packages/")))
   (package-initialize)
 
   (unless (package-installed-p 'use-package)
@@ -94,6 +93,9 @@
   (setq use-package-always-ensure t)
 #+end_src
 
+#+RESULTS:
+: t
+
 * Diminish
 #+begin_src emacs-lisp
   (use-package diminish)
@@ -101,8 +103,6 @@
 #+end_src
 
 #+RESULTS:
-
-
 
 * try
 try package without installing 
@@ -152,28 +152,30 @@ The selected them and customizations
 
 #+end_src
 
-
 * Org mode Stuff
 the org mode customizations
 #+begin_src emacs-lisp
-  (use-package org-bullets
-    :ensure t
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-  (custom-set-variables
-   '(org-directoy "~/orgFiles")
-   '(org-default-notes-file (concat org-directory "/notes.org"))
-   '(org-startup-folted (quote overview))
-   '(org-hide-leading-stars t)
-   '(org-startup-indented t)
-   )
-  (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-Cc" 'org-capture)
+    (use-package org
+      :ensure t)
+    (use-package org-bullets
+      :ensure t
+      :config
+      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+    (custom-set-variables
+     '(org-directoy "~/orgFiles")
+     '(org-default-notes-file (concat org-directory "/notes.org"))
+     '(org-startup-folted (quote overview))
+     '(org-hide-leading-stars t)
+     '(org-startup-indented t)
+     )
+    (global-set-key "\C-ca" 'org-agenda)
+    (global-set-key "\C-Cc" 'org-capture)
 
 
 #+end_src
 
 #+RESULTS:
+: org-capture
 
 * Vertico 
 #+begin_src emacs-lisp
@@ -332,7 +334,6 @@ the org mode customizations
 
 
 
-
 * Company(auto complete)
 #+begin_src emacs-lisp
   (use-package company
@@ -402,7 +403,15 @@ the org mode customizations
 #+RESULTS:
 | hindent-mode | lsp |
 
-* lsp-mode
+* eglot (another lsp-server)
+#+begin_src emacs-lisp
+  (use-package eglot
+    )
+
+#+end_src
+
+
+* COMMENT lsp-mode
 #+begin_src emacs-lisp
 
   (use-package lsp-mode
@@ -617,7 +626,5 @@ convert an org file to the html presentation
 #+begin_src emacs-lisp
     (hl-line-mode 1)
 #+end_src
-
-
 
 
