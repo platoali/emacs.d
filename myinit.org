@@ -278,64 +278,38 @@ the org mode customizations
 
 #+RESULTS:
 
-* COMMENT corfu
+* corfu
 #+begin_src emacs-lisp
-;;    (use-package corfu
-;;      :ensure t
-;;      :init
-;;      (global-corfu-mode)
-;;      :config
-;;      (corfu-echo-mode)
-;;      (corfu-history-mode)
-;;      )
-
-    ;; Optional cape package.
-  ;; See the Cape README for more tweaks!
-  (use-package cape
-    :ensure t)
-
-;;  (use-package orderless
-;;    :ensure t
-;;    :init
-;;    ;; Tune the global completion style settings to your liking!
-;;    ;; This affects the minibuffer and non-lsp completion at point.
-;;    (setq completion-styles '(orderless partial-completion basic)
-;;          completion-category-defaults nil
-;;          completion-category-overrides nil))
-
-  (use-package lsp-mode
-    :ensure t
+  (use-package corfu
     :custom
-    (lsp-completion-provider :none) ;; we use Corfu!
-
+    (corfu-cyclt t)
+    (corfu-auto t)
+    (corfu-auto-prefix 2)
+    (corfu-auto-delay 0.0)
+    (corfu-gait-at-boundry 'separator)
+    (corfu-echo-documentation 0.25)
+    (corfu-preview-current 'insert)
+    (corfu-preselect-first nil)
+    :bind
+    (:map corfu-map
+          ("M-SPC" . corfu-insert-separator)
+          ("RET" . nil)
+          ("TAB" . corfu-next)
+          ([tab] . corfu-next)
+          ("S-TAB" . corfu-previous)
+          ([backtab] . corfu-previous)
+          ("S-<return>" . corfu-insert)
+          )
     :init
-    (defun my/orderless-dispatch-flex-first (_pattern index _total)
-      (and (eq index 0) 'orderless-flex))
-
-    (defun my/lsp-mode-setup-completion ()
-      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-            '(orderless)))
-
-    ;; Optionally configure the first word as flex filtered.
-    (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
-
-    ;; Optionally configure the cape-capf-buster.
-    ;(setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))
-
-    :hook
-    (lsp-completion-mode . my/lsp-mode-setup-completion)
-    (haskell-mode . lsp))
-
-
+    (global-corfu-mode)
+    (corfu-history-mode)
+    )
+ 
 
 #+end_src
 
-#+RESULTS:
-| lsp |
 
-
-
-* Company(auto complete)
+* COMMENT Company(auto complete)
 #+begin_src emacs-lisp
   (use-package company
      :ensure t
@@ -380,25 +354,26 @@ the org mode customizations
 * Haskell
 #+begin_src emacs-lisp
 
-      (use-package haskell-mode
-        :init
-        (setq haskell-tags-on-save t)        
-        :config
-        (lsp)
-        :custom
-        (haskell-mode-hook '(interactive-haskell-mode lsp))
-        )
-  
+  (use-package haskell-mode
+    :init
+    (setq haskell-tags-on-save t)        
+    :config
+    (eglot)
+  ; (lsp)
+  ;  :custom
+  ;  (haskell-mode-hook '(interactive-haskell-mode lsp))
+    )
 
-      (use-package dap-mode
-        :ensure t)
-                                              ;(use-package dap-haskell)
-      (use-package company-ghci
-        :config
-        (push 'company-ghci company-backends)
-        (add-hook 'haskell-interactive-mode-hook 'company-mode)
-        )
-      (add-hook 'haskell-mode-hook #'hindent-mode)
+
+  (use-package dap-mode
+    :ensure t)
+                                          ;(use-package dap-haskell)
+  (use-package company-ghci
+    :config
+    (push 'company-ghci company-backends)
+    (add-hook 'haskell-interactive-mode-hook 'company-mode)
+    )
+  (add-hook 'haskell-mode-hook #'hindent-mode)
 #+end_src
 
 #+RESULTS:
@@ -410,6 +385,19 @@ the org mode customizations
     )
 
 #+end_src
+
+#+RESULTS:
+
+* cape
+#+begin_src emacs-lisp
+  (use-package cape
+    :init
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    )
+#+end_src
+
+#+RESULTS:
 
 
 * COMMENT lsp-mode
