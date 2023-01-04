@@ -232,6 +232,7 @@ the org mode customizations
     ( "C-x b" . 'consult-buffer)
     ( "C-s" . 'consult-line))
   (recentf-mode)
+  (use-package consult-yasnippet )
 
   (setq completion-ignore-case t)
   (setq read-file-name-completion-ignore-case t)
@@ -304,9 +305,11 @@ the org mode customizations
     (global-corfu-mode)
     (corfu-history-mode)
     )
- 
-
+   
 #+end_src
+
+#+RESULTS:
+: corfu-insert
 
 
 * COMMENT Company(auto complete)
@@ -358,16 +361,27 @@ the org mode customizations
     :init
     (setq haskell-tags-on-save t)        
     :config
-    (eglot)
+    (add-hook 'haskell-mode-hook 'eglot-ensure)
+
   ; (lsp)
-  ;  :custom
-  ;  (haskell-mode-hook '(interactive-haskell-mode lsp))
+   ; :custom
+   ; (haskell-mode-hook '(interactive-haskell-mode lsp))
     )
+ #+end_src
 
-
+* dab mode 
+#+begin_src emacs-lisp
+  
   (use-package dap-mode
     :ensure t)
-                                          ;(use-package dap-haskell)
+
+;  (use-package dap-haskell)
+  #+end_src 
+  
+
+* company ghci
+#+begin_src emacs-lisp 
+
   (use-package company-ghci
     :config
     (push 'company-ghci company-backends)
@@ -458,7 +472,7 @@ the org mode customizations
     :init
     (yas-global-mode 1)
     )
-  
+
   (use-package yasnippet-snippets
     :ensure t
     )
@@ -610,7 +624,26 @@ convert an org file to the html presentation
 #+RESULTS:
 : helpful-key
 
+* speed type
+#+begin_src emacs-lisp
+        (use-package speed-type
+          :custom
+          (speed-type-default-lang 'English))
+    
 
+
+#+end_src
+
+#+RESULTS:
+
+
+* evil-mode
+#+begin_src emacs-lisp
+  (use-package evil
+      ;:custom
+      ; (evlil-mode 1)
+  )
+#+end_src
 * Check if everything is OK
 #+begin_src emacs-lisp
     (hl-line-mode 1)
