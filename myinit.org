@@ -674,7 +674,7 @@ convert an org file to the html presentation
 * repeate
 #+begin_src emacs-lisp 
  
-    (repeat-mode))
+    (repeat-mode)
 #+end_src 
 
 * Visual column mode
@@ -691,137 +691,143 @@ convert an org file to the html presentation
 *  exwm
 
 #+begin_src emacs-lisp
-  ;; rebind caps lock to Ctrl
+    ;; rebind caps lock to Ctrl
 
-                 (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-                 (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
-                 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-                 (add-to-list 'default-frame-alist '(fullscreen . maximum))
-                 (start-process-shell-command "xmodmap" nil "xmodmap ~/.Xmodmap")
-                 (setq exwm-workspace-show-all-buffers t)
-                 (setq exwm-layout-show-all-buffers t)
-                 (defun efs/exwm-update-class ()
-                   (exwm-workspace-rename-buffer exwm-class-name))
+                   (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+                   (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+                   (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+                   (add-to-list 'default-frame-alist '(fullscreen . maximum))
+                   (start-process-shell-command "xmodmap" nil "xmodmap ~/.Xmodmap")
+                   (setq exwm-workspace-show-all-buffers t)
+                   (setq exwm-layout-show-all-buffers t)
+                   (defun efs/exwm-update-class ()
+                     (exwm-workspace-rename-buffer exwm-class-name))
 
-                 (use-package exwm
-                   :config
-                   (setq exwm-workspace-number 5)
-                   )
-
-
-                 (require 'exwm)
-                 (require 'exwm-config)
-                 (exwm-config-default)
-                 (require 'exwm-systemtray)
-
-                 (require 'exwm-xim)
-                 (exwm-xim-enable)
+                   (use-package exwm
+                     :config
+                     (setq exwm-workspace-number 5)
+                     )
 
 
+                   (require 'exwm)
+                   (require 'exwm-config)
+                   (exwm-config-default)
+                   (require 'exwm-systemtray)
 
-
-                 (push ?\C-\\ exwm-input-prefix-keys)
-
-
-                 (setq exwm-workspace-number 10)
-
-                 (start-process-shell-command "xrandr" nil
-                                              "xrandr --output VGA-1 --off --output HDMI-1 --mode 1920x1200 --pos 0x0 --rotate normal --output DP-1 --off")
-                 (exwm-systemtray-enable)
-                 (require 'exwm-randr)
-                 (exwm-randr-enable)
-
-           (setq exwm-input-global-keys
-                 `(([?\s-r] . exwm-reset)
-                   ([?\s-h] . grow-window-vertically)
-                   ([?\s-l] . shrink-window-vertically)
-                   ([?\s-\t] . other-window )
-                   ([?\s-w] . exwm-workspace-switch)
-                   ([?\s-\s] . counsel-linux-app)
-                   ([?\s-p] . counsel-linux-app)
-                   ([?\s-`] . (lambda () (interactive)
-                               (exwm-workspace-switch-create 0)))
-                   ,@(mapcar (lambda (i)
-                               `(,(kbd (format "s-%d" i)) .
-                                 (lambda ()
-                                   (interactive)
-                                   (exwm-workspace-switch-create ,i))))
-                             (number-sequence 0 9))
-                   ))
-
-
-             (setq exwm-input-simulation-keys
-                   '(([?\C-b] . [left])
-                     ([?\C-f] . [right])
-                     ([?\C-p] . [up])
-                     ([?\C-n] . [down])
-                     ([?\C-a] . [home])
-                     ([?\C-e] . [end])
-                     ([?\M-v] . [prior])
-                     ([?\C-v] . [next])
-                     ([?\C-d] . [delete])
-                     ([?\C-k] . [S-end delete])))
-
-
-      (exwm-enable)
+                   (require 'exwm-xim)
+                   (exwm-xim-enable)
 
 
 
-                 (use-package desktop-environment
-                   :after exwm
 
-                   )
+                   (push ?\C-\\ exwm-input-prefix-keys)
 
 
-    (add-hook 'exwm-manage-finish-hook
-              (lambda ()
-                (when (and exwm-class-name
-                           (string= exwm-class-name "XTerm"))
-                  (exwm-input-set-local-simulation-keys '(([?\C-c ?\C-c] . ?\C-c))))))
+                   (setq exwm-workspace-number 10)
 
-              ;   (setq display-time-format "%d/%m/%Y %T")
-              ;   (display-time-mode 1)
-                 (use-package counsel
-                   :bind
-                   ("s-SPC" . counsel-linux-app)
-                   ("C-x C-f" . counsel-find-file)
-                   :custom
-                   (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-                   )
+                   (start-process-shell-command "xrandr" nil
+                                                "xrandr --output VGA-1 --off --output HDMI-1 --mode 1920x1200 --pos 0x0 --rotate normal --output DP-1 --off")
+                   (exwm-systemtray-enable)
+                   (require 'exwm-randr)
+                   (exwm-randr-enable)
 
-                 (defun efs/exwm-update-title ()
-                   (pcase exwm-class-name
-                     ("firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
-                 (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
-
-
-            ;     (exwm-input-set-key (kbd "s-SPC") 'counsel-linux-app)
-                 (exwm-input-set-key (kbd "<s-return>")  (lambda ()
-                                                           (interactive
-                                                            (start-process-shell-command "alacritty" nil "alacritty"))))
-    (exwm-input-set-key (kbd "C-s-j") 'window-swap-states)
-            (exwm-workspace-switch-create 1)
-
-  (server-start)
+             (setq exwm-input-global-keys
+                   `(([?\s-r] . exwm-reset)
+                     ([?\s-h] . grow-window-vertically)
+                     ([?\s-l] . shrink-window-vertically)
+                     ([?\s-\t] . other-window )
+                     ([?\s-w] . exwm-workspace-switch)
+                     ([?\s-\s] . counsel-linux-app)
+                     ([?\s-p] . counsel-linux-app)
+                     ([?\s-`] . (lambda () (interactive)
+                                 (exwm-workspace-switch-create 0)))
+                     ,@(mapcar (lambda (i)
+                                 `(,(kbd (format "s-%d" i)) .
+                                   (lambda ()
+                                     (interactive)
+                                     (exwm-workspace-switch-create ,i))))
+                               (number-sequence 0 9))
+                     ))
 
 
-  ;; polybar
+               (setq exwm-input-simulation-keys
+                     '(([?\C-b] . [left])
+                       ([?\C-f] . [right])
+                       ([?\C-p] . [up])
+                       ([?\C-n] . [down])
+                       ([?\C-a] . [home])
+                       ([?\C-e] . [end])
+                       ([?\M-v] . [prior])
+                       ([?\C-v] . [next])
+                       ([?\C-d] . [delete])
+                       ([?\C-k] . [S-end delete])))
 
-  (defvar efs/panel-process nil
-    "holds the process of the running panel if any")
-  (defun efs/kill-panel ()
+
+        (exwm-enable)
+
+
+
+                   (use-package desktop-environment
+                     :after exwm
+
+                     )
+
+
+      (add-hook 'exwm-manage-finish-hook
+                (lambda ()
+                  (when (and exwm-class-name
+                             (string= exwm-class-name "XTerm"))
+                    (exwm-input-set-local-simulation-keys '(([?\C-c ?\C-c] . ?\C-c))))))
+
+                ;   (setq display-time-format "%d/%m/%Y %T")
+                ;   (display-time-mode 1)
+                   (use-package counsel
+                     :bind
+                     ("s-SPC" . counsel-linux-app)
+                     ("C-x C-f" . counsel-find-file)
+                     :custom
+                     (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+                     )
+
+                   (defun efs/exwm-update-title ()
+                     (pcase exwm-class-name
+                       ("firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
+                   (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
+
+
+              ;     (exwm-input-set-key (kbd "s-SPC") 'counsel-linux-app)
+                  (exwm-input-set-key (kbd "<s-return>")  'vterm)
+
+
+  (defun alacritty ()
+    "Alacritty"
     (interactive)
-    (when efs/panel-process
-      (ignore-errors
-        (kill-process efs/panel-process ))))
+    (call-process-shell-command "/usr/bin/alacritty" nil 0))
 
-  (defun efs/start-panel ()
-    (interactive)
-    (efs/kill-panel)
-    (setq efs/panel-process
-          (start-process-shell-command "xmobar" nil "xmobar -d ~/.config/xmobar/xmobarrc.exwm.hs ")))
 
-  (efs/start-panel)
+      (exwm-input-set-key (kbd "C-s-j") 'window-swap-states)
+              (exwm-workspace-switch-create 1)
+
+    (server-start)
+
+
+    ;; polybar
+
+    (defvar efs/panel-process nil
+      "holds the process of the running panel if any")
+    (defun efs/kill-panel ()
+      (interactive)
+      (when efs/panel-process
+        (ignore-errors
+          (kill-process efs/panel-process ))))
+
+    (defun efs/start-panel ()
+      (interactive)
+      (efs/kill-panel)
+      (setq efs/panel-process
+            (start-process-shell-command "xmobar" nil "xmobar -d ~/.config/xmobar/xmobarrc.exwm.hs ")))
+
+    (efs/start-panel)
           #+END_SRC
 
 
