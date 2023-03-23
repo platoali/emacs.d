@@ -6,7 +6,6 @@
   (set-default-coding-systems 'utf-8)
   (set-keyboard-coding-system 'utf-8-unix)
   (set-input-method "farsi-isiri-9147" t)
-  (setq bidi-paragraph-direction nil)
 
 #+end_src
 
@@ -856,6 +855,7 @@ convert an org file to the html presentation
   (toggle-input-method)
   (setq bidi-paragraph-direction nil)
   (set-input-method "farsi-isiri-9147" t)
+  (set-frame-font "Vazirmatn" t t nil)
   #+end_src
 
 
