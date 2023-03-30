@@ -9,8 +9,18 @@
 
 #+end_src
 
-#+RESULTS:
-
+#+RESULTS
+* change  auto-save files location
+#+begin_src emacs-lisp
+  (setq
+   backup-by-copying t      ; don't clobber symlinks
+   backup-directory-alist
+    '(("." . "~/.saves/"))    ; don't litter my fs tree
+   delete-old-versions t
+   kept-new-versions 6
+   kept-old-versions 2
+   version-control t) 
+#+end_src
 * Path
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell
@@ -800,7 +810,10 @@ convert an org file to the html presentation
 
                    (defun efs/exwm-update-title ()
                      (pcase exwm-class-name
-                       ("firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
+                       ("firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))
+                       ("qutebrowser" (exwm-workspace-rename-buffer (format "qute: %s" exwm-title)))
+                       ))
+
                    (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
 
 
@@ -854,8 +867,8 @@ convert an org file to the html presentation
   (hl-line-mode 1)
   (toggle-input-method)
   (setq bidi-paragraph-direction nil)
+  (set-frame-font "Vazirmatn 11" t t nil)
   (set-input-method "farsi-isiri-9147" t)
-  (set-frame-font "Vazirmatn" t t nil)
   #+end_src
 
 
