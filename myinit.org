@@ -272,27 +272,19 @@ The selected them and customizations
 the org mode customizations
 #+begin_src emacs-lisp
 
-      (use-package org
-        ;;:ensure t
-        )
-      (use-package org-bullets
-        ;;:ensure t
-        :config
-        (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-      (custom-set-variables
-       '(org-directoy "~/orgFiles")
-       '(org-default-notes-file (concat org-directory "/notes.org")))
-
-  ;(push 'org-habit org-modules)q
+  (use-package org
+              )
   (use-package org-bullets
-        :ensure t
-        :config
-        (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+              :config
+  	    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  (custom-set-variables
+   '(org-directoy "~/orgFiles")
+   '(org-default-notes-file (concat org-directory "/notes.org")))
+
+
   (custom-set-variables
        '(org-directoy "~/orgFiles")
        '(org-default-notes-file (concat org-directory "/notes.org/"))
-
-
        '(org-startup-folted (quote overview))
        '(org-hide-leading-stars t)
        '(org-startup-indented t)
@@ -300,19 +292,10 @@ the org mode customizations
 
       (global-set-key "\C-ca" 'org-agenda)
       (global-set-key "\C-Cc" 'org-capture)
-      (defun set-bidi-env ()
+  (defun set-bidi-env ()
       "interactive"
       (setq bidi-paragraph-direction 'nil))
-    (add-hook 'org-mode-hook 'set-bidi-env)
-
-
-
-  (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-Cc" 'org-capture)
-
-
-
-
+  (add-hook 'org-mode-hook 'set-bidi-env)
 #+end_src
 
 #+RESULTS:
@@ -321,7 +304,6 @@ the org mode customizations
 * Vertico 
 #+begin_src emacs-lisp
   (use-package vertico
-    ;;:ensure t
     :init
     (vertico-mode +1)
     :custom
@@ -332,23 +314,19 @@ the org mode customizations
 
 * oderless
   #+begin_src emacs-lisp 
-  
-  (use-package orderless
-    ;; :ensure t
-    :init
-    (setq completion-styles '(orderless partial-completion basic)
-          completion-category-defaults nil
-          completion-category-overrides '((file (styles partial-completion)))))
+    (use-package orderless
+      :init
+      (setq completion-styles '(orderless partial-completion basic)
+    	completion-category-defaults nil
+    	completion-category-overrides '((file (styles partial-completion)))))
   #+end_src
 
   #+RESULTS:
 
 *  saveHise
+Persist history over Emacs restarts. Vertico sorts by history position.
 #+begin_src emacs-lisp
-
-  ;; Persist history over Emacs restarts. Vertico sorts by history position.
   (use-package savehist
-    ;;:ensure t
     :init
     (savehist-mode))
 #+end_src
@@ -359,7 +337,6 @@ the org mode customizations
 #+begin_src emacs-lisp
   (use-package marginalia
     :after vertico
-   ;; :ensure t
     :custom
     (marginalia-annotators '(marginalia-annotators-heavy
                              marginalia-annotators-light
@@ -373,19 +350,24 @@ the org mode customizations
 
 * cunsult 
 #+begin_src emacs-lisp
-
   (use-package consult
-    ;;:ensure t
-    :bind
-    ("M-y" . 'consult-yank-from-kill-ring)
-    ( "C-x b" . 'consult-buffer)
-    ( "C-s" . 'consult-line))
-  (recentf-mode)
-  (use-package consult-yasnippet )
+      :bind
+      ("M-y" . 'consult-yank-from-kill-ring)
+      ( "C-x b" . 'consult-buffer)
+      ( "C-s" . 'consult-line)
+      ("s-SPC" . counsel-linux-app)
+      ("C-x C-f" . counsel-find-file)
+      :custom
+      (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+      )
 
-  (setq completion-ignore-case t)
-  (setq read-file-name-completion-ignore-case t)
+    (recentf-mode)
+    (use-package consult-yasnippet )
 
+    (setq completion-ignore-case t)
+
+  
+    (setq read-file-name-completion-ignore-case t)
 #+end_src
 
 #+RESULTS:
@@ -393,9 +375,7 @@ the org mode customizations
 
 * embark
 #+begin_src emacs-lisp
-  
   (use-package embark
-  ;;  :ensure t
     :bind    (("C-," . embark-act)         ;; pick some comfortable binding
      ("C-;" . embark-dwim)        ;; good alternative: M-.
      ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
@@ -404,13 +384,11 @@ the org mode customizations
     ;; Optionally replace the key help with a completing-read interface
     (setq prefix-help-command #'embark-prefix-help-command)
     :config
-
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
                  '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                    nil
                    (window-parameters (mode-line-format . none))))
-
     )
 
   ;; Consult users will also want the embark-consult package.
@@ -424,10 +402,7 @@ the org mode customizations
     (embark-collect-mode . consult-preview-at-point-mode))
 
 #+end_src
-
-
 #+RESULTS:
-
 * corfu
 #+begin_src emacs-lisp
   (use-package corfu
@@ -509,22 +484,15 @@ the org mode customizations
 
 * Haskell
 #+begin_src emacs-lisp
-
   (use-package haskell-mode
     :init
     (setq haskell-tags-on-save t)        
     :config
     (add-hook 'haskell-mode-hook 'eglot-ensure)
-
-  ; (lsp)
-   ; :custom
-   ; (haskell-mode-hook '(interactive-haskell-mode lsp))
     )
  #+end_src
-
  #+RESULTS:
  : t
-
 * COMMENT dab mode 
 #+begin_src emacs-lisp
   
@@ -535,9 +503,8 @@ the org mode customizations
   ;  (use-package dap-haskell)
   #+end_src 
 
-* c company ghci
+* Company ghci
 #+begin_src emacs-lisp 
-
   (use-package company-ghci
     :config
     (push 'company-ghci company-backends)
@@ -556,12 +523,7 @@ the org mode customizations
 
 #+end_src
 
-#+RESULTS:
-
-* cape
-=======
-* Company(auto complete)
-
+* cape 
 #+begin_src emacs-lisp
   (use-package cape
     :init
@@ -571,7 +533,6 @@ the org mode customizations
 #+end_src
 
 #+RESULTS:
-
 * COMMENT  c lsp-mode
 #+begin_src emacs-lisp
 
@@ -618,17 +579,14 @@ the org mode customizations
 * Flycheck
 #+begin_src emacs-lisp
   (use-package flycheck
-
     :init
     (global-flycheck-mode t))
 #+end_src
 
 #+RESULTS:
-
 * Yasnippet
 #+begin_src emacs-lisp
   (use-package yasnippet
-  ;  :ensure t
     :init
     (yas-global-mode 1)
     )
@@ -645,7 +603,6 @@ the org mode customizations
 convert an org file to the html presentation
 #+begin_src emacs-lisp
   (use-package ox-reveal
-
     :init
     (setq org-reveal-root "http://cdn.jsdeliver.net/reveal.js/3.0.0/")
     (setq org-reveal-mathjax t)
@@ -669,7 +626,6 @@ convert an org file to the html presentation
 * Web Mode (unfinished, untested)
 #+begin_src emacs-lisp
   (use-package web-mode
-
       :config
       (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
       (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
@@ -685,59 +641,25 @@ convert an org file to the html presentation
   
 
 #+end_src
-
-#+RESULTS:
-: t
-
 * projectile
 #+begin_src emacs-lisp
-
-    (use-package projectile
-      :config
-      (projectile-global-mode)
-    
-  ;    (setq projectile-completion-system 'ivy)
-      :init
-      (when (file-directory-p "~/projects/")
-        (setq projectile-projct-search-path "~/project/"))
-      (setq projectile-switch-project-action #'projectile-dired)
-      )
-
-    ;; (use-package counsel-projectile
-    ;;   :ensure t
-    ;;   :config
-    ;;   (counsel-projectile-mode t))
-    ;;(use-package consult-projectile
-     ;;  )
-
   (use-package projectile
-
     :config
     (projectile-global-mode)
     (setq projectile-completion-system 'ivy)
     (projectile-register-project-type 'stack '("stack.yaml")
-                                  :project-file "stack.yaml"
-                                  :compile "stack build"
-                                  :test "stack  test"
-                                  :run "stack run"
-                                  :test-dir "test/")
+                                      :project-file "stack.yaml"
+                                      :compile "stack build"
+                                      :test "stack  test"
+                                      :run "stack run"
+                                      :test-dir "test/")
     )
-  (use-package counsel-projectile
 
+  (use-package counsel-projectile
     :config
     (counsel-projectile-mode t))
-
-
-  
   (use-package projectile-ripgrep)
-
-
-
 #+end_src
-
-#+RESULTS:
-: t
-
 * COMMENT c Ibuffer
 #+begin_src emacs-lisp
        (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -776,30 +698,17 @@ convert an org file to the html presentation
     )
 
 #+end_src
-
-#+RESULTS:
-: helpful-variable
-
 * Emmet-mode (html and css completions)
 #+begin_src emacs-lisp
         (use-package emmet-mode
-        ;  :ensure t
+
           :config
           (add-hook 'web-mode-hook 'emmet-mode))
- 
-
 #+end_src
-
-#+RESULTS:
-: t
-
 * Magit
 #+begin_src emacs-lisp
   (use-package magit)
 #+end_src
-
-#+RESULTS:
-
 * helpful
 #+begin_src emacs-lisp
   (use-package helpful
@@ -810,9 +719,6 @@ convert an org file to the html presentation
     ([remap describe-key] . helpful-key))
 
 #+end_src
-
-#+RESULTS:
-: helpful-key
 
 * COMMENT speed type
 #+begin_src emacs-lisp
@@ -830,18 +736,10 @@ convert an org file to the html presentation
 * evil-mode
 #+begin_src emacs-lisp
   (use-package evil
-      ;:custom
-      ; (evlil-mode 1)
   )
 #+end_src
-
-#+RESULTS:
-
 * transpost frame
-
 #+begin_src  emacs-lisp
-
-
 (use-package transpose-frame)
     
 (global-set-key (kbd "C-<tab> <left>")  'flop-frame)
@@ -851,18 +749,10 @@ convert an org file to the html presentation
 (global-set-key (kbd "C-<tab> j") 'rotate-frame-clockwise)
 (global-set-key (kbd "C-<tab> k") 'rotate-frame-anticlockwise)
 #+end_src   
-
-#+RESULTS:
-: rotate-frame-anticlockwise
-   
 * repeate
 #+begin_src emacs-lisp 
     (repeat-mode)
 #+end_src 
-
-#+RESULTS:
-: t
-
 * Visual ycolumn mode
 #+begin_src emacs-lisp
     (defun efs/org-mode-visual-fill ()
@@ -873,18 +763,10 @@ convert an org file to the html presentation
       :hook (org-mode . efs/org-mode-visual-fill)
       )
 #+end_src 
-
-#+RESULTS:
-| efs/org-mode-visual-fill | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | set-bidi-env | (lambda nil (org-bullets-mode 1)) | (lambda nil (display-line-numbers-mode 0)) | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-fold-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
-
 * multiple vterm
 #+begin_src emacs-lisp
-  
   (use-package multi-vterm)
 #+end_src
-
-#+RESULTS:
-
 *  exwm
 #+begin_src emacs-lisp
   (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
@@ -906,14 +788,11 @@ convert an org file to the html presentation
   (require 'exwm-config)
   (exwm-config-default)
   ;;  (require 'exwm-systemtray)
-
   (require 'exwm-xim)
   (exwm-xim-enable)
 
   (push ?\C-\\ exwm-input-prefix-keys)
-
   (setq exwm-workspace-number 10)
-
   (start-process-shell-command "xrandr" nil
                                "xrandr --output VGA-1 --off --output HDMI-1 --mode 1920x1200 --pos 0x0 --rotate normal --output DP-1 --off")
   ;;  (exwm-systemtray-enable)
@@ -950,24 +829,9 @@ convert an org file to the html presentation
           ([?\C-d] . [delete])
           ([?\C-k] . [S-end delete])))
 
-  ;;k(exwm-enable)
-
-  ;; (use-package desktop-environment
-  ;;   :after exwm
-
-  ;;   )
-
-
   ;;( setq display-time-format "%d/%m/%Y %T")
   ;;(display-time-mode 1)
-  (use-package counsel
-    :bind
-    ("s-SPC" . counsel-linux-app)
-    ("C-x C-f" . counsel-find-file)
-    :custom
-    (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-    )
-
+  
   (defun efs/exwm-update-title ()
     (pcase exwm-class-name
       ("firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))
@@ -975,7 +839,6 @@ convert an org file to the html presentation
       ))
 
   (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
-
   ;;    (exwm-input-set-key (kbd "<s-return>")  'vterm)
   (exwm-input-set-key (kbd "<s-return>")  'multi-vterm)
   (exwm-input-set-key (kbd "C-S-j") 'window-swap-states)
@@ -1011,18 +874,12 @@ convert an org file to the html presentation
 
     #+END_Src
 
-    #+RESULTS:
-    : #<process xmodmap>
-
 * Golden ratio
 #+begin_src emacs-lisp
   (use-package golden-ratio
     :config 
     (golden-ratio-mode 1)
     )
-
-
-
 #+end_src
 * Check if everything is OK
 #+begin_src emacs-lisp
@@ -1034,6 +891,9 @@ convert an org file to the html presentation
   (set-input-method "farsi-isiri-9147" t)
   (hl-line-mode 1)
 #+end_src
+
+
+
 
 
 
