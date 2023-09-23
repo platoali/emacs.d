@@ -12,7 +12,7 @@
 #+end_src
 
 #+RESULTS:
-: farsi-isiri-9147
+: t
 
 #+RESULTS
 * COMMENT elpaca
@@ -78,6 +78,7 @@ Save auto save file in a separate directory. don't litter the file system with a
 #+end_src
 
 #+RESULTS:
+: t
 
 * Path
 make environment variabls look like Shell. Specially since emacs executed from systemd or lightDM(login session)
@@ -88,6 +89,9 @@ make environment variabls look like Shell. Specially since emacs executed from s
     (exec-path-from-shell-initialize))
 
 #+end_src
+
+#+RESULTS:
+: t
 
 
 * Interface tweeks
@@ -175,7 +179,6 @@ package management, different repository , refreshing and ...
 #+end_src
 
 #+RESULTS:
-: t
 
 * COMMENT org
 #+begin_src emacs-lisp
@@ -194,7 +197,7 @@ package management, different repository , refreshing and ...
 * Diminish
 #+begin_src emacs-lisp
       (use-package diminish
-        :ensure t
+
         )
 
 #+end_src
@@ -205,7 +208,7 @@ package management, different repository , refreshing and ...
 try package without installing 
 #+begin_src emacs-lisp
     (use-package try
-  ;;    :ensure t
+
       )
 #+end_src
 
@@ -215,7 +218,7 @@ try package without installing
 #+begin_src emacs-lisp
 
   (use-package which-key
-;;    :ensure t
+
     :config (which-key-mode))
 #+end_src
 
@@ -268,7 +271,7 @@ The selected them and customizations
 * Org mode Stuff
 the org mode customizations
 #+begin_src emacs-lisp
-<<<<<<< HEAD
+
       (use-package org
         ;;:ensure t
         )
@@ -278,8 +281,8 @@ the org mode customizations
         (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
       (custom-set-variables
        '(org-directoy "~/orgFiles")
-       '(org-default-notes-file (concat org-directory "/notes.org"))
-=======
+       '(org-default-notes-file (concat org-directory "/notes.org")))
+
   ;(push 'org-habit org-modules)q
   (use-package org-bullets
         :ensure t
@@ -288,12 +291,13 @@ the org mode customizations
   (custom-set-variables
        '(org-directoy "~/orgFiles")
        '(org-default-notes-file (concat org-directory "/notes.org/"))
->>>>>>> help
+
+
        '(org-startup-folted (quote overview))
        '(org-hide-leading-stars t)
        '(org-startup-indented t)
        )
-<<<<<<< HEAD
+
       (global-set-key "\C-ca" 'org-agenda)
       (global-set-key "\C-Cc" 'org-capture)
       (defun set-bidi-env ()
@@ -302,17 +306,17 @@ the org mode customizations
     (add-hook 'org-mode-hook 'set-bidi-env)
 
 
-=======
+
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-Cc" 'org-capture)
->>>>>>> help
+
 
 
 
 #+end_src
 
 #+RESULTS:
-| efs/org-mode-visual-fill | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | set-bidi-env | (lambda nil (org-bullets-mode 1)) | (lambda nil (display-line-numbers-mode 0)) | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-fold-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+: org-capture
 
 * Vertico 
 #+begin_src emacs-lisp
@@ -366,6 +370,8 @@ the org mode customizations
 
 #+RESULTS:
 : t
+
+* cunsult 
 #+begin_src emacs-lisp
 
   (use-package consult
@@ -552,11 +558,10 @@ the org mode customizations
 
 #+RESULTS:
 
-<<<<<<< HEAD
 * cape
 =======
 * Company(auto complete)
->>>>>>> help
+
 #+begin_src emacs-lisp
   (use-package cape
     :init
@@ -566,7 +571,6 @@ the org mode customizations
 #+end_src
 
 #+RESULTS:
-
 
 * COMMENT  c lsp-mode
 #+begin_src emacs-lisp
@@ -614,7 +618,7 @@ the org mode customizations
 * Flycheck
 #+begin_src emacs-lisp
   (use-package flycheck
-  ;  :ensure t
+
     :init
     (global-flycheck-mode t))
 #+end_src
@@ -641,7 +645,7 @@ the org mode customizations
 convert an org file to the html presentation
 #+begin_src emacs-lisp
   (use-package ox-reveal
-    ;:ensure t
+
     :init
     (setq org-reveal-root "http://cdn.jsdeliver.net/reveal.js/3.0.0/")
     (setq org-reveal-mathjax t)
@@ -665,7 +669,7 @@ convert an org file to the html presentation
 * Web Mode (unfinished, untested)
 #+begin_src emacs-lisp
   (use-package web-mode
-;      :ensure t
+
       :config
       (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
       (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
@@ -687,7 +691,7 @@ convert an org file to the html presentation
 
 * projectile
 #+begin_src emacs-lisp
-<<<<<<< HEAD
+
     (use-package projectile
       :config
       (projectile-global-mode)
@@ -705,9 +709,9 @@ convert an org file to the html presentation
     ;;   (counsel-projectile-mode t))
     ;;(use-package consult-projectile
      ;;  )
-=======
+
   (use-package projectile
-    :ensure t
+
     :config
     (projectile-global-mode)
     (setq projectile-completion-system 'ivy)
@@ -719,29 +723,16 @@ convert an org file to the html presentation
                                   :test-dir "test/")
     )
   (use-package counsel-projectile
-    :ensure t
+
     :config
     (counsel-projectile-mode t))
 
-  (use-package smartparens
-    :ensure ;TODO: 
-    :hook (prog-mode . smartparens-mode)
-    :custom
-    (sp-escape-quotes-after-insert nil)
-    :config
-    (require 'smartparens-config))
+
   
   (use-package projectile-ripgrep)
->>>>>>> help
 
-    (use-package smartparens
-      :hook (prog-mode . smartparens-mode)
-      :custom
-      (sp-escape-quotes-after-insert nil)
-      :config
-      (require 'smartparens-config))
 
-    (show-paren-mode t)
+
 #+end_src
 
 #+RESULTS:
@@ -871,7 +862,6 @@ convert an org file to the html presentation
 
 #+RESULTS:
 : t
-
 
 * Visual ycolumn mode
 #+begin_src emacs-lisp
@@ -1024,7 +1014,6 @@ convert an org file to the html presentation
     #+RESULTS:
     : #<process xmodmap>
 
-
 * Golden ratio
 #+begin_src emacs-lisp
   (use-package golden-ratio
@@ -1037,15 +1026,14 @@ convert an org file to the html presentation
 #+end_src
 * Check if everything is OK
 #+begin_src emacs-lisp
-<<<<<<< HEAD
+
   (hl-line-mode 1)
   (toggle-input-method)
   (setq bidi-paragraph-direction nil)
   (set-frame-font "Vazirmatn 11" t t nil)
   (set-input-method "farsi-isiri-9147" t)
-  #+end_src
-=======
-    (hl-line-mode 1)
+  (hl-line-mode 1)
 #+end_src
 
->>>>>>> help
+
+
