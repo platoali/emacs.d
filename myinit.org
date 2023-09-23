@@ -89,8 +89,6 @@ make environment variabls look like Shell. Specially since emacs executed from s
 
 #+end_src
 
-#+RESULTS:
-: t
 
 * Interface tweeks
 - clean the interface. (no tool-bar, no scroll bar, no menu bar. )
@@ -270,6 +268,7 @@ The selected them and customizations
 * Org mode Stuff
 the org mode customizations
 #+begin_src emacs-lisp
+<<<<<<< HEAD
       (use-package org
         ;;:ensure t
         )
@@ -280,16 +279,33 @@ the org mode customizations
       (custom-set-variables
        '(org-directoy "~/orgFiles")
        '(org-default-notes-file (concat org-directory "/notes.org"))
+=======
+  ;(push 'org-habit org-modules)q
+  (use-package org-bullets
+        :ensure t
+        :config
+        (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  (custom-set-variables
+       '(org-directoy "~/orgFiles")
+       '(org-default-notes-file (concat org-directory "/notes.org/"))
+>>>>>>> help
        '(org-startup-folted (quote overview))
        '(org-hide-leading-stars t)
        '(org-startup-indented t)
        )
+<<<<<<< HEAD
       (global-set-key "\C-ca" 'org-agenda)
       (global-set-key "\C-Cc" 'org-capture)
       (defun set-bidi-env ()
       "interactive"
       (setq bidi-paragraph-direction 'nil))
     (add-hook 'org-mode-hook 'set-bidi-env)
+
+
+=======
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-Cc" 'org-capture)
+>>>>>>> help
 
 
 
@@ -536,7 +552,11 @@ the org mode customizations
 
 #+RESULTS:
 
+<<<<<<< HEAD
 * cape
+=======
+* Company(auto complete)
+>>>>>>> help
 #+begin_src emacs-lisp
   (use-package cape
     :init
@@ -667,6 +687,7 @@ convert an org file to the html presentation
 
 * projectile
 #+begin_src emacs-lisp
+<<<<<<< HEAD
     (use-package projectile
       :config
       (projectile-global-mode)
@@ -684,6 +705,34 @@ convert an org file to the html presentation
     ;;   (counsel-projectile-mode t))
     ;;(use-package consult-projectile
      ;;  )
+=======
+  (use-package projectile
+    :ensure t
+    :config
+    (projectile-global-mode)
+    (setq projectile-completion-system 'ivy)
+    (projectile-register-project-type 'stack '("stack.yaml")
+                                  :project-file "stack.yaml"
+                                  :compile "stack build"
+                                  :test "stack  test"
+                                  :run "stack run"
+                                  :test-dir "test/")
+    )
+  (use-package counsel-projectile
+    :ensure t
+    :config
+    (counsel-projectile-mode t))
+
+  (use-package smartparens
+    :ensure ;TODO: 
+    :hook (prog-mode . smartparens-mode)
+    :custom
+    (sp-escape-quotes-after-insert nil)
+    :config
+    (require 'smartparens-config))
+  
+  (use-package projectile-ripgrep)
+>>>>>>> help
 
     (use-package smartparens
       :hook (prog-mode . smartparens-mode)
@@ -726,8 +775,19 @@ convert an org file to the html presentation
 #+RESULTS:
 | lambda | nil | (ibuffer-auto-mode 1) | (ibuffer-switch-to-saved-filter-groups default) |
 
+* helpfull
+#+begin_src emacs-lisp
+  (use-package helpful
+    :ensure t
+    :bind
+    ("C-h f" . helpful-callable)
+    ("C-h v" . helpful-variable)
+    )
 
+#+end_src
 
+#+RESULTS:
+: helpful-variable
 
 * Emmet-mode (html and css completions)
 #+begin_src emacs-lisp
@@ -977,9 +1037,15 @@ convert an org file to the html presentation
 #+end_src
 * Check if everything is OK
 #+begin_src emacs-lisp
+<<<<<<< HEAD
   (hl-line-mode 1)
   (toggle-input-method)
   (setq bidi-paragraph-direction nil)
   (set-frame-font "Vazirmatn 11" t t nil)
   (set-input-method "farsi-isiri-9147" t)
   #+end_src
+=======
+    (hl-line-mode 1)
+#+end_src
+
+>>>>>>> help
